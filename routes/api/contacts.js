@@ -1,14 +1,29 @@
 const express = require("express");
 const router = express.Router();
-const ctrl = require("../../controllers/contacts");
+const { contacts: ctrl } = require("../../controllers");
+const { joiSchema, favoriteJoiSchema } = require("../../models");
+const {
+  validationPost,
+  validationUpdate,
+  validateId,
+} = require("../../middlewares");
 const { ctrlWrapper } = require("../../helpers");
-const { validationPost, validationPut } = require("../../middlewares");
-const schemas = require("../../schemas/contact");
 
 router.get("/", ctrlWrapper(ctrl.getAll));
-router.get("/:id", ctrlWrapper(ctrl.getById));
-router.post("/", validationPost(schemas.add), ctrlWrapper(ctrl.add));
-router.put("/:id", validationPut(schemas.add), ctrlWrapper(ctrl.updateById));
-router.delete("/:id", ctrlWrapper(ctrl.removeById));
+router.get("/:id", validateId, ctrlWrapper(ctrl.getById));
+router.post("/", validationPost(joiSchema), ctrlWrapper(ctrl.add));
+router.delete("/:id", validateId, ctrlWrapper(ctrl.removeById));
+router.put(
+  "/:id",
+  validateId,
+  validationUpdate(joiSchema),
+  ctrlWrapper(ctrl.putById)
+);
+router.patch(
+  "/:id/favorite",
+  validateId,
+  validationUpdate(favoriteJoiSchema),
+  ctrlWrapper(ctrl.updateFavorite)
+);
 
 module.exports = router;

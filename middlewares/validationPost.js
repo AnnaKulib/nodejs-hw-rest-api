@@ -1,15 +1,13 @@
-const { RequestError } = require("../helpers");
+const { BadRequest } = require("http-errors");
 
 const validationPost = (schema) => {
-  const func = async (req, res, next) => {
+  return (req, _, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      next(RequestError(400, "missing required name field"));
+      throw new BadRequest("missing required fields");
     }
     next();
   };
-
-  return func;
 };
 
 module.exports = validationPost;

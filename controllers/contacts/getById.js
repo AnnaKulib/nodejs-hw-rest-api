@@ -1,14 +1,16 @@
-const contacts = require("../../models/contacts");
-const { RequestError } = require("../../helpers");
+const { Contact } = require("../../models");
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   const { id } = req.params;
 
-  const result = await contacts.getContactById(id);
-  if (!result) {
-    throw RequestError(404, "Not found");
-  }
-  res.json(result);
+  const result = await Contact.findById(id);
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = getById;

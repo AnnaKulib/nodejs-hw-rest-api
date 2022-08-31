@@ -6,12 +6,18 @@ const {
   validationPost,
   validationUpdate,
   validateId,
+  authenticate,
 } = require("../../middlewares");
 const { ctrlWrapper } = require("../../helpers");
 
-router.get("/", ctrlWrapper(ctrl.getAll));
+router.get("/", authenticate, ctrlWrapper(ctrl.getAll));
 router.get("/:id", validateId, ctrlWrapper(ctrl.getById));
-router.post("/", validationPost(joiSchema), ctrlWrapper(ctrl.add));
+router.post(
+  "/",
+  authenticate,
+  validationPost(joiSchema),
+  ctrlWrapper(ctrl.add)
+);
 router.delete("/:id", validateId, ctrlWrapper(ctrl.removeById));
 router.put(
   "/:id",

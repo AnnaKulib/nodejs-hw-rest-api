@@ -3,6 +3,7 @@ const validationUpdate = require("./validationUpdate");
 const validateId = require("./validateId");
 const validationBody = require("./validationBody");
 const authenticate = require("./authenticate");
+const upload = require("./upload");
 
 module.exports = {
   validationPost,
@@ -10,4 +11,5 @@ module.exports = {
   validationUpdate,
   validationBody,
   authenticate,
+  upload,
 };
